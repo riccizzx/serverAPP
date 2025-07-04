@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="client.cpp" />
     <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="server.cpp" />

@@ -1,14 +1,14 @@
 #pragma once
 
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #include <iostream>
-#include <WS2tcpip.h> // For inet_ntop
+#include <vector>
 #include <string>
-#include <vector>     // For managing multiple clients
-#include <winsock2.h> // For Winsock functions
 
-#pragma comment(lib, "ws2_32.lib") // Link with the Winsock library
+#pragma comment(lib, "ws2_32.lib")
 
-#define PORT 9909 // Default port for the server
+#define PORT 9909
 
 class Net {
 public:
@@ -22,13 +22,14 @@ public:
 	void run();
 
 private:
-	void cleanup();
-	int nRet;
-
 	SOCKET serverSock;
-	FD_SET masterReadSet;   // Master set of socket descriptors for reading
-	FD_SET masterExceptSet; // Master set of socket descriptors for exceptional conditions
-	int maxFd;              // The highest-valued socket descriptor in any set, plus 1
+	std::vector<SOCKET> clientSockets;
 
-	std::vector<SOCKET> clientSockets; // Dynamically stores all connected client sockets
+	fd_set masterReadSet;
+	fd_set masterExceptSet;
+
+	int nRet;
+	int maxFd;
+
+	void cleanup();
 };
