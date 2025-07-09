@@ -36,6 +36,7 @@ void Net::initialize() {
 	WSADATA ws;
 	if (WSAStartup(MAKEWORD(2, 2), &ws) != 0) {
 		std::cerr << "ERROR! " << WSAGetLastError() << "\n";
+		WSACleanup();
 		exit(1);
 	}
 	std::cout << "WSADATA initialization successful.\n";
@@ -57,21 +58,28 @@ void Net::bindandListen() {
 	serverAddr.sin_port = htons(PORT);
 	serverAddr.sin_addr.s_addr = INADDR_ANY;
 
-	nRet = bind(serverSock, (sockaddr*)&serverAddr, sizeof(serverAddr));
-	if (nRet == SOCKET_ERROR) {
-		std::cerr << "ERROR: bind failed: " << WSAGetLastError() << "\n";
-		cleanup();
-		exit(1);
-	}
-	std::cout << "Bind successful.\n";
+	try {
+		nRet = bind(serverSock, (sockaddr*)&serverAddr, sizeof(serverAddr));
+		if (nRet == SOCKET_ERROR) {
+			std::cerr << "ERROR: bind failed: " << WSAGetLastError() << "\n";
+			cleanup();
+			exit(1);
+		}
+		std::cout << "Bind successful.\n";
 
-	nRet = listen(serverSock, SOMAXCONN);
-	if (nRet == SOCKET_ERROR) {
-		std::cerr << "ERROR: listen failed: " << WSAGetLastError() << "\n";
+		nRet = listen(serverSock, SOMAXCONN);
+		if (nRet == SOCKET_ERROR) {
+			std::cerr << "ERROR: listen failed: " << WSAGetLastError() << "\n";
+			cleanup();
+			exit(1);
+		}
+		std::cout << "Listening on port " << PORT << "\n";
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Exception during address setup: " << e.what() << "\n";
 		cleanup();
 		exit(1);
 	}
-	std::cout << "Listening on port " << PORT << "\n";
 }
 
 void Net::startEventLoop() {
@@ -79,7 +87,7 @@ void Net::startEventLoop() {
 	FD_SET(serverSock, &masterExceptSet);
 	maxFd = serverSock;
 
-	std::cout << "Server event loop started.\n";
+	//std::cout << "Server event loop started.\n";
 
 	while (true) {
 		fd_set tempReadSet = masterReadSet;
@@ -107,6 +115,7 @@ void Net::startEventLoop() {
 				std::cerr << "Accept failed: " << WSAGetLastError() << "\n";
 			}
 			else {
+				std::cout << "New client connected (socket: " << clientSock << ").\n";
 				clientSockets.push_back(clientSock);
 				FD_SET(clientSock, &masterReadSet);
 				FD_SET(clientSock, &masterExceptSet);

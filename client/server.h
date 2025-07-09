@@ -10,11 +10,6 @@
 
 #define PORT 9909
 
-#ifdef _WIN32
-#define GETSOCKETERRNO() WSAGetLastError()
-#else
-#define GETSOCKETERRNO() errno
-
 class Net {
 public:
 	Net();
