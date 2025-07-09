@@ -79,7 +79,7 @@ void Net::startEventLoop() {
 	FD_SET(serverSock, &masterExceptSet);
 	maxFd = serverSock;
 
-	std::cout << "Server event loop started. Press Ctrl+C to stop.\n";
+	std::cout << "Server event loop started.\n";
 
 	while (true) {
 		fd_set tempReadSet = masterReadSet;
@@ -117,11 +117,11 @@ void Net::startEventLoop() {
 				ZeroMemory(service, NI_MAXSERV);
 
 				if (getnameinfo((sockaddr*)&clientAddr, sizeof(clientAddr), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0) {
-					std::cout << "New connection from " << host << ":" << service << "\n";
+					std::cout << "New connection from " << host << ": " << service << "\n";
 				}
 				else {
 					inet_ntop(AF_INET, &clientAddr.sin_addr, host, NI_MAXHOST);
-					std::cout << "New connection from " << host << ":" << ntohs(clientAddr.sin_port) << "\n";
+					std::cout << "New connection from " << host << ": " << ntohs(clientAddr.sin_port) << "\n";
 				}
 
 				std::string welcomeMsg = "Welcome to the echo server! Type 'exit' to disconnect.\r\n";
