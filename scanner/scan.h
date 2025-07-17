@@ -12,7 +12,7 @@ namespace Scan {
 	class Scanner {
 	public:
 		void listeningPorts();
-
+		int run();
 
 	};
 }

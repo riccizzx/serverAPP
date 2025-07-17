@@ -15,19 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="server.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="scanner.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="server.h">
+    <ClInclude Include="scan.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="config.ini" />
   </ItemGroup>
 </Project>

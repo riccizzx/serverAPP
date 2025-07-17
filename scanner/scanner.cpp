@@ -1,4 +1,4 @@
-#include "scanner.h"
+#include "scan.h"
 
 void Scan::Scanner::listeningPorts() {
     PMIB_TCPTABLE_OWNER_PID pTcpTable;
@@ -46,4 +46,10 @@ void Scan::Scanner::listeningPorts() {
     if (pTcpTable) {
         free(pTcpTable);
     }
+}
+
+int Scan::Scanner::run() {
+    std::cout << "Scanning for listening ports...\n";
+    listeningPorts();
+    return 0;
 }
