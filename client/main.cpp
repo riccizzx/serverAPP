@@ -2,7 +2,8 @@
 
 //function main to run the server
 int main() {
-	Net net;
+	//Net net;
+	Networking::Net net;
 	try {
 		net.run();
 	}

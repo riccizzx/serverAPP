@@ -8,16 +8,16 @@
 
 //Initializes member variables to default states and clears FD_SETs.
 
-Net::Net() : serverSock(INVALID_SOCKET), nRet(0), maxFd(0) {
+Networking::Net::Net() : serverSock(INVALID_SOCKET), nRet(0), maxFd(0) {
 	FD_ZERO(&masterReadSet);
 	FD_ZERO(&masterExceptSet);
 }
 
-Net::~Net() {
+Networking::Net::~Net() {
 	cleanup();
 }
 
-void Net::cleanup() {
+void Networking::Net::cleanup() {
 	for (SOCKET sock : clientSockets) {
 		if (sock != INVALID_SOCKET) closesocket(sock);
 	}
@@ -32,7 +32,7 @@ void Net::cleanup() {
 	std::cout << "Winsock cleaned up and all sockets closed.\n";
 }
 
-void Net::initialize() {
+void Networking::Net::initialize() {
 	WSADATA ws;
 	if (WSAStartup(MAKEWORD(2, 2), &ws) != 0) {
 		std::cerr << "ERROR! " << WSAGetLastError() << "\n";
@@ -42,7 +42,7 @@ void Net::initialize() {
 	std::cout << "WSADATA initialization successful.\n";
 }
 
-void Net::createSocket() {
+void Networking::Net::createSocket() {
 	serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (serverSock == INVALID_SOCKET) {
 		std::cerr << "ERROR: can't create socket: " << WSAGetLastError() << "\n";
@@ -52,7 +52,7 @@ void Net::createSocket() {
 	std::cout << "SOCKET creation successful.\n";
 }
 
-void Net::bindandListen() {
+void Networking::Net::bindandListen() {
 	sockaddr_in serverAddr;
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_port = htons(PORT);
@@ -82,7 +82,7 @@ void Net::bindandListen() {
 	}
 }
 
-void Net::startEventLoop() {
+void Networking::Net::startEventLoop() {
 	FD_SET(serverSock, &masterReadSet);
 	FD_SET(serverSock, &masterExceptSet);
 	maxFd = serverSock;
@@ -205,7 +205,7 @@ void Net::startEventLoop() {
 	}
 }
 
-void Net::run() {
+void Networking::Net::run() {
 	std::cout << "* * RUN * *\n";
 	initialize();
 	createSocket();

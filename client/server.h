@@ -5,31 +5,34 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <string_view>
 
 #pragma comment(lib, "ws2_32.lib")
 
-#define PORT 9909
+constexpr int PORT = 9909; // Port number for the server
 
-class Net {
-public:
-	Net();
-	~Net();
+namespace Networking {
+	class Net {
+	public:
+		Net();
+		~Net();
 
-	void initialize();
-	void createSocket();
-	void bindandListen();
-	void startEventLoop();
-	void run();
+		void initialize();
+		void createSocket();
+		void bindandListen();
+		void startEventLoop();
+		void run();
 
-private:
-	SOCKET serverSock;
-	std::vector<SOCKET> clientSockets;
+	private:
+		SOCKET serverSock;
+		std::vector<SOCKET> clientSockets;
 
-	fd_set masterReadSet;
-	fd_set masterExceptSet;
+		fd_set masterReadSet;
+		fd_set masterExceptSet;
 
-	int nRet;
-	int maxFd;
+		int nRet;
+		int maxFd;
 
-	void cleanup();
-};
+		void cleanup();
+	};
+}
