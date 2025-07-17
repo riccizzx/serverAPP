@@ -1,5 +1,5 @@
 #include "server.h"
-#include "scan.h"
+//#include "scan.h"
 
 /**
   *							  *
